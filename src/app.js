@@ -7,12 +7,17 @@ import workspaceRouter from "./routes/workspace.routes.js";
 
 const app = express()
 
+// The app is commonly hosted behind a TLS-terminating proxy in production.
+app.set("trust proxy", 1);
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  process.env.FRONTEND_URL || "https://task-board-delta-amber.vercel.app",
+].filter(Boolean);
+
 // global middlewares
 app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "https://task-board-delta-amber.vercel.app"
-  ],
+  origin: allowedOrigins,
   credentials: true
 }));
 

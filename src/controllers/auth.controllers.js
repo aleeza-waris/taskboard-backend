@@ -11,6 +11,7 @@ import {
 } from "../utils/jwt.js";
 import { OAuth2Client } from "google-auth-library";
 import jwt from "jsonwebtoken";
+import { refreshCookieOptions } from "../utils/session-cookie.js";
 
 // registering new user
 const registerUser = async (req, res, next) => {
@@ -106,12 +107,7 @@ const loginUser = async (req, res, next) => {
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie("refreshToken", refreshToken, refreshCookieOptions);
 
     res.status(200).json({
       success: true,
@@ -253,12 +249,7 @@ const googleAuth = async (req, res, next) => {
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie("refreshToken", refreshToken, refreshCookieOptions);
 
     const defaultFrontendOrigin =
       process.env.FRONTEND_URL ||
